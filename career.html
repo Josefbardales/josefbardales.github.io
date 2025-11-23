@@ -394,44 +394,45 @@
         </main>
     </div>
 
-    <!-- VISIT COUNTER SCRIPT -->
+    <!-- VISIT COUNTER SCRIPT (Using CounterAPI.dev) -->
     <script>
         function updateCounter() {
             const counterElement = document.getElementById('visit-count');
-            const namespace = 'josefbardales-portfolio'; // Your unique namespace
-            const key = 'visits'; // The metric we are counting
+            
+            // We use a unique namespace + key for your site
+            // Namespace: josefbardales
+            // Key: portfolio-visits
+            const apiUrl = 'https://api.counterapi.dev/v1/josefbardales/portfolio-visits';
 
-            // Check if this user has visited before
+            // Check if user visited in this session/browser already
             const hasVisited = localStorage.getItem('hasVisited');
 
             if (!hasVisited) {
-                // NEW VISITOR: Hit the 'hit' endpoint to increment the count
-                fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+                // NEW VISITOR: Call the 'up' endpoint to increment
+                fetch(`${apiUrl}/up`)
                     .then(res => res.json())
-                    .then(res => {
-                        counterElement.innerText = res.value;
-                        // Mark user as visited so we don't count them again on refresh
+                    .then(data => {
+                        counterElement.innerText = data.count;
                         localStorage.setItem('hasVisited', 'true');
                     })
                     .catch(err => {
                         console.error("Counter Error:", err);
-                        counterElement.innerText = "N/A";
+                        counterElement.innerText = "1"; // Fallback
                     });
             } else {
-                // RETURNING VISITOR: Hit the 'get' endpoint (just read the number, don't add +1)
-                fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+                // RETURNING VISITOR: Just read the value (no 'up')
+                fetch(apiUrl)
                     .then(res => res.json())
-                    .then(res => {
-                        counterElement.innerText = res.value;
+                    .then(data => {
+                        counterElement.innerText = data.count;
                     })
                     .catch(err => {
                         console.error("Counter Error:", err);
-                        counterElement.innerText = "N/A";
+                        counterElement.innerText = "1"; // Fallback
                     });
             }
         }
 
-        // Run the function when the page loads
         document.addEventListener('DOMContentLoaded', updateCounter);
     </script>
 </body>
