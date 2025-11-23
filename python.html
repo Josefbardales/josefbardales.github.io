@@ -382,8 +382,49 @@ sample_text = <span class="code-string">"I absolutely love this new feature! It'
         </main>
     </div>
 
-    <!-- CUSTOM SENTIMENT ANALYZER (NO EXTERNAL DEPENDENCIES) -->
+    <!-- VISIT COUNTER SCRIPT -->
     <script>
+        function updateCounter() {
+            const counterElement = document.getElementById('visit-count');
+            const namespace = 'josefbardales-portfolio'; // Your unique namespace
+            const key = 'visits'; // The metric we are counting
+
+            // Check if this user has visited before
+            const hasVisited = localStorage.getItem('hasVisited');
+
+            if (!hasVisited) {
+                // NEW VISITOR: Hit the 'hit' endpoint to increment the count
+                fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+                    .then(res => res.json())
+                    .then(res => {
+                        counterElement.innerText = res.value;
+                        // Mark user as visited so we don't count them again on refresh
+                        localStorage.setItem('hasVisited', 'true');
+                    })
+                    .catch(err => {
+                        console.error("Counter Error:", err);
+                        counterElement.innerText = "N/A";
+                    });
+            } else {
+                // RETURNING VISITOR: Hit the 'get' endpoint (just read the number, don't add +1)
+                fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+                    .then(res => res.json())
+                    .then(res => {
+                        counterElement.innerText = res.value;
+                    })
+                    .catch(err => {
+                        console.error("Counter Error:", err);
+                        counterElement.innerText = "N/A";
+                    });
+            }
+        }
+
+        // Run the function when the page loads
+        document.addEventListener('DOMContentLoaded', updateCounter);
+    </script>
+
+</body>
+</html>
         // A mini-lexicon of VADER-style words to ensure the demo works offline.
         const lexicon = {
             "good": 3, "great": 4, "awesome": 4, "amazing": 4, "excellent": 4, "fantastic": 4,
