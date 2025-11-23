@@ -333,7 +333,7 @@
             <h2 style="margin-top: 50px; border-bottom: 1px solid #2c3e50; padding-bottom: 10px;">Education</h2>
             <div class="edu-card">
                 <!-- UNITEC Logo increased to match class size -->
-                <img src="images/Unitec.png" alt="UNITEC Logo" class="company-logo">
+                <img src="images/unitec.png" alt="UNITEC Logo" class="company-logo">
                 <div>
                     <div class="edu-school">Central America Technological University (UNITEC)</div>
                     <div class="edu-degree">Industrial & Systems Engineering</div>
@@ -394,5 +394,46 @@
         </main>
     </div>
 
+    <!-- VISIT COUNTER SCRIPT (Using CounterAPI.dev) -->
+    <script>
+        function updateCounter() {
+            const counterElement = document.getElementById('visit-count');
+            
+            // We use a unique namespace + key for your site
+            // Namespace: josefbardales
+            // Key: portfolio-visits
+            const apiUrl = 'https://api.counterapi.dev/v1/josefbardales/portfolio-visits';
+
+            // Check if user visited in this session/browser already
+            const hasVisited = localStorage.getItem('hasVisited');
+
+            if (!hasVisited) {
+                // NEW VISITOR: Call the 'up' endpoint to increment
+                fetch(`${apiUrl}/up`)
+                    .then(res => res.json())
+                    .then(data => {
+                        counterElement.innerText = data.count;
+                        localStorage.setItem('hasVisited', 'true');
+                    })
+                    .catch(err => {
+                        console.error("Counter Error:", err);
+                        counterElement.innerText = "1"; // Fallback
+                    });
+            } else {
+                // RETURNING VISITOR: Just read the value (no 'up')
+                fetch(apiUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        counterElement.innerText = data.count;
+                    })
+                    .catch(err => {
+                        console.error("Counter Error:", err);
+                        counterElement.innerText = "1"; // Fallback
+                    });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateCounter);
+    </script>
 </body>
 </html>

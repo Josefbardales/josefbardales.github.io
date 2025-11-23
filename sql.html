@@ -369,5 +369,46 @@
         </main>
     </div>
 
+    <!-- VISIT COUNTER SCRIPT (Using CounterAPI.dev) -->
+    <script>
+        function updateCounter() {
+            const counterElement = document.getElementById('visit-count');
+            
+            // We use a unique namespace + key for your site
+            // Namespace: josefbardales
+            // Key: portfolio-visits
+            const apiUrl = 'https://api.counterapi.dev/v1/josefbardales/portfolio-visits';
+
+            // Check if user visited in this session/browser already
+            const hasVisited = localStorage.getItem('hasVisited');
+
+            if (!hasVisited) {
+                // NEW VISITOR: Call the 'up' endpoint to increment
+                fetch(`${apiUrl}/up`)
+                    .then(res => res.json())
+                    .then(data => {
+                        counterElement.innerText = data.count;
+                        localStorage.setItem('hasVisited', 'true');
+                    })
+                    .catch(err => {
+                        console.error("Counter Error:", err);
+                        counterElement.innerText = "1"; // Fallback
+                    });
+            } else {
+                // RETURNING VISITOR: Just read the value (no 'up')
+                fetch(apiUrl)
+                    .then(res => res.json())
+                    .then(data => {
+                        counterElement.innerText = data.count;
+                    })
+                    .catch(err => {
+                        console.error("Counter Error:", err);
+                        counterElement.innerText = "1"; // Fallback
+                    });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateCounter);
+    </script>
 </body>
 </html>
