@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WTJXDSS7');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python & NLP Sentiment Analysis - Jose Bardales</title>
+    <style>
+        /* --- RESET & BASICS --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* THEME: Royal Navy Blue */
+            background-color: #152039; 
+            color: #e0e0e0;
+            line-height: 1.8; 
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 300px;
+            height: 100vh; 
+            position: sticky;
+            top: 0;
+            overflow-y: auto; 
+            background-color: #0d1424;
+            padding: 30px 25px; 
+            border-right: 1px solid #2c3e50;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: #0d1424; }
+        .sidebar::-webkit-scrollbar-thumb { background: #2c3e50; border-radius: 4px; }
+
+        .sidebar h1 { font-size: 1.8rem; margin-bottom: 5px; color: #fff; font-weight: 600; }
+        .role-title { color: #ffffff; font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
+        .location-title { color: #a0aec0; font-size: 0.9rem; margin-bottom: 20px; display: block; }
+        .sidebar p { margin-bottom: 15px; color: #cfcfcf; font-size: 0.9rem; line-height: 1.5;}
+        .sidebar h3 { margin-bottom: 5px; color: #fff; font-weight: 600; font-size: 1.1rem; }
+
+        a { color: #C0C0C0; text-decoration: none; transition: color 0.3s ease; font-weight: 500; }
+        a:hover { color: #ffffff; text-decoration: underline; }
+
+        .back-btn {
+            display: block;
+            margin-bottom: 20px;
+            color: #4fd1c5;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .back-btn:hover { color: #fff; text-decoration: none; }
+
+        .visit-counter {
+            background-color: #1e2b4a;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            border: 1px solid #3b4c75;
+            text-align: center;
+        }
+        .counter-number { display: inline-block; margin-left: 5px; font-weight: bold; color: #4fd1c5; }
+
+        .cert-section { margin-top: 5px; margin-bottom: 15px; border-top: 1px solid #2c3e50; padding-top: 15px; }
+        .cert-item { margin-bottom: 12px; }
+        .cert-title { font-size: 0.95rem; color: #fff; margin-bottom: 2px; line-height: 1.2; font-weight: 600;}
+        .cert-issuer { font-size: 0.8rem; color: #8892b0; margin-bottom: 2px; font-style: italic; }
+        .cert-link { font-size: 0.8rem; display: inline-block; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 50px 80px;
+            background-color: #152039;
+            max-width: 1200px; 
+        }
+
+        h1.page-title { font-size: 2.2rem; margin-bottom: 10px; color: #fff; }
+        
+        .header-split {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            gap: 40px;
+            flex-wrap: wrap-reverse; 
+        }
+
+        .header-left { flex: 1; min-width: 300px; }
+        .header-right { flex-shrink: 0; }
+
+        .header-logo {
+            width: 180px; 
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
+        }
+
+        .toc-box {
+            background-color: #1e2b4a;
+            padding: 20px 25px;
+            border-radius: 12px;
+            border: 1px solid #2c3e50;
+            margin-top: 20px;
+            display: inline-block;
+            width: 100%;
+        }
+        .toc-box h3 { margin-top: 0; font-size: 1.1rem; color: #C0C0C0; margin-bottom: 10px;}
+        .toc-box ul { list-style: none; padding-left: 0; margin: 0; }
+        .toc-box li { margin-bottom: 8px; }
+        .toc-box a { color: #4fd1c5; }
+
+        section h2 { 
+            font-size: 1.5rem; 
+            margin-top: 40px; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #2c3e50; 
+            padding-bottom: 10px; 
+            color: #fff;
+        }
+        section h3, section h4 { color: #fff; margin-top: 25px; margin-bottom: 10px; }
+        
+        section p { margin-bottom: 20px; color: #cfcfcf; font-size: 1.05rem; }
+        section li { margin-bottom: 8px; }
+
+        .code-block {
+            background-color: #0b101d; 
+            border: 1px solid #2c3e50;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95rem;
+            color: #d4d4d4;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .code-keyword { color: #c678dd; font-weight: bold; } 
+        .code-func { color: #61afef; } 
+        .code-string { color: #98c379; } 
+        .code-comment { color: #7f848e; font-style: italic; }
+
+        /* --- INTERACTIVE DEMO STYLING --- */
+        .demo-box {
+            background-color: #1e2b4a;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #4fd1c5; 
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 100px;
+            border-radius: 8px;
+            border: 1px solid #2c3e50;
+            background-color: #0d1424;
+            color: #fff;
+            padding: 15px;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1rem;
+            resize: none;
+            margin-bottom: 20px;
+        }
+        
+        textarea:focus { outline: 2px solid #4fd1c5; }
+
+        .demo-btn {
+            background-color: #4fd1c5;
+            color: #0d1424;
+            padding: 10px 25px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .demo-btn:hover { background-color: #fff; }
+
+        .result-display {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #2c3e50; overflow-y: visible; }
+            .main-content { padding: 30px 20px; }
+            .header-split { flex-direction: column-reverse; gap: 20px; }
+            .header-logo { width: 120px; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WTJXDSS7"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="container">
+        
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <a href="index.html" class="back-btn">&larr; Back to Portfolio</a>
+
+            <h1>Jose F. Bardales</h1>
+            <div class="role-title">Senior Data Scientist</div>
+            <div class="location-title">Tegucigalpa, Honduras</div>
+
+            <p>Hello! This is a collection of projects I have worked on using SQL, Tableau, and Python.</p>
+
+            <div class="visit-counter">
+                Total Portfolio Visits: <span class="counter-number" id="visit-count">0</span>
+            </div>
+
+            <h3 style="margin-bottom: 5px;">Contact</h3>
+            <p style="margin-bottom: 15px;">
+                <a href="mailto:josefbardales@outlook.com" target="_blank">josefbardales@outlook.com</a>
+            </p>
+
+            <div class="cert-section">
+                <h3 style="margin-bottom: 10px;">Certifications</h3>
+                
+                <div class="cert-item">
+                    <h4 class="cert-title">Google Data Analytics Certificate</h4>
+                    <p class="cert-issuer">Granted by: Google</p>
+                    <a href="https://www.coursera.org/account/accomplishments/professional-cert/FCPVMXLDTC8P?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+
+                <div class="cert-item">
+                    <h4 class="cert-title">Human Talent Management</h4>
+                    <p class="cert-issuer">Granted by: UNITEC</p>
+                    <a href="https://drive.google.com/file/d/1AyQhJ-RA9tMk2Nan43c7xekk6dTl53rm/view?usp=sharing" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+
+                <div class="cert-item">
+                    <h4 class="cert-title">1st Place, Int. Business Intelligence</h4>
+                    <p class="cert-issuer">Granted by: LABSAG</p>
+                    <a href="https://drive.google.com/file/d/1fmju_rH4lUeCkAAae4iq-oGTT6EVIlme/view?usp=sharing" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 10px; font-size: 1rem;">Social</h3>
+            <div style="display: flex; gap: 15px;">
+                <a href="https://github.com/Josefbardales/PortfolioCodes" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/josefbardales/" target="_blank">LinkedIn</a>
+            </div>
+        </aside>
+
+        <!-- RIGHT MAIN CONTENT -->
+        <main class="main-content">
+            
+            <div class="header-split">
+                <div class="header-left">
+                    <h1 class="page-title">Sentiment Analysis with Python & NLP</h1>
+                    
+                    <div class="toc-box">
+                        <h3>Table of Contents</h3>
+                        <ul>
+                            <li><a href="#overview">1. Project Overview</a></li>
+                            <li><a href="#logic">2. The Logic (NLTK)</a></li>
+                            <li><a href="#code">3. Python Implementation</a></li>
+                            <li><a href="#demo">4. Live Interactive Demo</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <img src="https://www.svgrepo.com/show/376344/python.svg" alt="Python Logo" class="header-logo">
+                </div>
+            </div>
+
+            <!-- OVERVIEW -->
+            <section id="overview">
+                <h2>1. Project Overview</h2>
+                <p>
+                    Natural Language Processing (NLP) is one of the most exciting fields in Data Science. In this project, I utilize the <strong>NLTK (Natural Language Toolkit)</strong> library to build a Sentiment Analyzer. 
+                </p>
+                <p>
+                    While advanced Transformer models like <strong>Cardiff's Twitter-RoBERTa</strong> offer state-of-the-art accuracy, they require heavy computational resources (GPUs) and large download sizes. For rapid analysis of social media text or customer reviews where speed is critical, rule-based models like <strong>VADER (Valence Aware Dictionary and sEntiment Reasoner)</strong> remain highly effective.
+                </p>
+            </section>
+
+            <!-- THE LOGIC -->
+            <section id="logic">
+                <h2>2. The Logic: How VADER Works</h2>
+                <p>
+                    VADER is a lexicon and rule-based sentiment analysis tool that is specifically attuned to sentiments expressed in social media. It doesn't just look at "good" or "bad" words; it understands the context:
+                </p>
+                <ul style="padding-left: 20px; color: #cfcfcf;">
+                    <li><strong>Polarity:</strong> Every word in the lexicon is rated between -4 (Negative) and +4 (Positive).</li>
+                    <li><strong>Intensity:</strong> It accounts for boosters (e.g., "really good" is stronger than "good").</li>
+                    <li><strong>Negation:</strong> It understands that "not bad" is actually positive.</li>
+                    <li><strong>Punctuation:</strong> "Great!!!" scores higher than "Great".</li>
+                </ul>
+            </section>
+
+            <!-- PYTHON CODE -->
+            <section id="code">
+                <h2>3. Python Implementation</h2>
+                <p>
+                    Below is the Python code used to implement this analysis in a production environment (e.g., a Jupyter Notebook or Backend Server).
+                </p>
+                
+                <div class="code-block">
+<span class="code-keyword">import</span> nltk<br>
+<span class="code-keyword">from</span> nltk.sentiment <span class="code-keyword">import</span> SentimentIntensityAnalyzer<br>
+<br>
+<span class="code-comment"># Download the VADER lexicon (Run once)</span><br>
+nltk.download(<span class="code-string">'vader_lexicon'</span>)<br>
+<br>
+<span class="code-comment"># Initialize the Analyzer</span><br>
+sia = SentimentIntensityAnalyzer()<br>
+<br>
+<span class="code-keyword">def</span> <span class="code-func">get_sentiment</span>(text):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;scores = sia.polarity_scores(text)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;compound = scores[<span class="code-string">'compound'</span>]<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">if</span> compound >= 0.05:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"Positive 😊"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">elif</span> compound <= -0.05:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"Negative 😠"</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">else</span>:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"Neutral 😐"</span><br>
+<br>
+<span class="code-comment"># Example Usage</span><br>
+sample_text = <span class="code-string">"I absolutely love this new feature! It's amazing."</span><br>
+<span class="code-func">print</span>(get_sentiment(sample_text))
+                </div>
+            </section>
+
+            <!-- LIVE DEMO -->
+            <section id="demo">
+                <h2>4. Live Interactive Demo</h2>
+                <p>
+                    Since this portfolio is hosted on GitHub Pages (a static environment), we cannot run the Python server above. However, I have implemented a <strong>Custom JavaScript Logic</strong> that mimics the VADER algorithm right here in your browser.
+                </p>
+                <p>
+                    Type any sentence below to test the model's logic in real-time. Try "TERRIBLE", "Amazing", or "Not bad".
+                </p>
+
+                <div class="demo-box">
+                    <textarea id="inputText" placeholder="Type something here (e.g., 'This project is absolutely fantastic!!!')"></textarea>
+                    <br>
+                    <button class="demo-btn" onclick="analyzeSentiment()">Analyze Sentiment</button>
+                    
+                    <div id="result" class="result-display">Waiting for input...</div>
+                </div>
+            </section>
+
+            <div style="margin-top: 60px; border-top: 1px solid #2c3e50; padding-top: 20px; text-align: center;">
+                <a href="index.html" class="back-btn" style="font-size: 1rem;">&larr; Return to All Projects</a>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- CUSTOM SENTIMENT ANALYZER (NO EXTERNAL DEPENDENCIES) -->
+    <script>
+        // A mini-lexicon of VADER-style words to ensure the demo works offline.
+        const lexicon = {
+            "good": 3, "great": 4, "awesome": 4, "amazing": 4, "excellent": 4, "fantastic": 4,
+            "love": 3, "like": 2, "nice": 2, "wonderful": 4, "best": 4, "better": 2,
+            "happy": 3, "glad": 2, "enjoy": 2, "perfect": 4, "cool": 2, "clean": 2,
+            "bad": -3, "terrible": -4, "awful": -4, "worst": -4, "hate": -4, "dislike": -3,
+            "poor": -2, "boring": -2, "slow": -2, "ugly": -2, "sad": -2, "disappointing": -3,
+            "horrible": -4, "gross": -3, "trash": -4, "fail": -3, "wrong": -2, "annoying": -2
+        };
+
+        function analyzeSentiment() {
+            var text = document.getElementById('inputText').value;
+            var resultDiv = document.getElementById('result');
+            
+            if (!text.trim()) {
+                resultDiv.innerHTML = "<span style='color: #cfcfcf;'>Please enter some text first.</span>";
+                return;
+            }
+
+            // 1. Tokenize (split by space and remove punctuation)
+            var words = text.toLowerCase().match(/\b(\w+)\b/g);
+            if (!words) {
+                resultDiv.innerHTML = "<span style='color: #f6e05e;'>NEUTRAL 😐 (No Scorable Words)</span>";
+                return;
+            }
+
+            var score = 0;
+
+            // 2. Score Calculation Loop
+            for (var i = 0; i < words.length; i++) {
+                var word = words[i];
+                var wordScore = lexicon[word] || 0;
+
+                // Check for negation (e.g., "not good")
+                if (i > 0) {
+                    var prevWord = words[i - 1];
+                    if (prevWord === "not" || prevWord === "no" || prevWord === "never") {
+                        wordScore = wordScore * -0.5; // Flip polarity
+                    }
+                }
+                score += wordScore;
+            }
+
+            // 3. Display Result
+            var displayBox = "";
+            if (score > 0) {
+                displayBox = "<span style='color: #4fd1c5;'>POSITIVE 😊 (Score: " + score + ")</span>";
+            } else if (score < 0) {
+                displayBox = "<span style='color: #ff6b6b;'>NEGATIVE 😠 (Score: " + score + ")</span>";
+            } else {
+                displayBox = "<span style='color: #f6e05e;'>NEUTRAL 😐 (Score: " + score + ")</span>";
+            }
+
+            resultDiv.innerHTML = displayBox;
+        }
+    </script>
+
+</body>
+</html>

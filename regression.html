@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WTJXDSS7');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regression Analysis (Honduras) - Jose Bardales</title>
+    <style>
+        /* --- RESET & BASICS --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* THEME: Royal Navy Blue */
+            background-color: #152039; 
+            color: #e0e0e0;
+            line-height: 1.8; 
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 300px;
+            height: 100vh; 
+            position: sticky;
+            top: 0;
+            overflow-y: auto; 
+            /* THEME: Darker Navy */
+            background-color: #0d1424;
+            padding: 30px 25px; 
+            border-right: 1px solid #2c3e50;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: #0d1424; }
+        .sidebar::-webkit-scrollbar-thumb { background: #2c3e50; border-radius: 4px; }
+
+        /* Sidebar Typography */
+        .sidebar h1 { font-size: 1.8rem; margin-bottom: 5px; color: #fff; font-weight: 600; }
+        .role-title { color: #ffffff; font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
+        .location-title { color: #a0aec0; font-size: 0.9rem; margin-bottom: 20px; display: block; }
+        .sidebar p { margin-bottom: 15px; color: #cfcfcf; font-size: 0.9rem; line-height: 1.5;}
+        .sidebar h3 { margin-bottom: 5px; color: #fff; font-weight: 600; font-size: 1.1rem; }
+
+        /* Links */
+        a { color: #C0C0C0; text-decoration: none; transition: color 0.3s ease; font-weight: 500; }
+        a:hover { color: #ffffff; text-decoration: underline; }
+
+        /* Back Button */
+        .back-btn {
+            display: block;
+            margin-bottom: 20px;
+            color: #4fd1c5;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .back-btn:hover { color: #fff; text-decoration: none; }
+
+        /* Visit Counter */
+        .visit-counter {
+            background-color: #1e2b4a;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            border: 1px solid #3b4c75;
+            text-align: center;
+        }
+        .counter-number { display: inline-block; margin-left: 5px; font-weight: bold; color: #4fd1c5; }
+
+        /* Certificates */
+        .cert-section { margin-top: 5px; margin-bottom: 15px; border-top: 1px solid #2c3e50; padding-top: 15px; }
+        .cert-item { margin-bottom: 12px; }
+        .cert-title { font-size: 0.95rem; color: #fff; margin-bottom: 2px; line-height: 1.2; font-weight: 600;}
+        .cert-issuer { font-size: 0.8rem; color: #8892b0; margin-bottom: 2px; font-style: italic; }
+        .cert-link { font-size: 0.8rem; display: inline-block; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 50px 80px;
+            /* THEME: Royal Navy Blue */
+            background-color: #152039;
+            max-width: 1200px; 
+        }
+
+        h1.page-title { font-size: 2.2rem; margin-bottom: 10px; color: #fff; }
+        
+        /* Header Layout */
+        .header-split {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            gap: 40px;
+            flex-wrap: wrap-reverse; 
+        }
+
+        .header-left { flex: 1; min-width: 300px; }
+        .header-right { flex-shrink: 0; }
+
+        /* Header Logo */
+        .header-logo {
+            width: 200px; 
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
+        }
+
+        /* TOC Box */
+        .toc-box {
+            background-color: #1e2b4a;
+            padding: 20px 25px;
+            border-radius: 12px;
+            border: 1px solid #2c3e50;
+            margin-top: 20px;
+            display: inline-block;
+            width: 100%;
+        }
+        .toc-box h3 { margin-top: 0; font-size: 1.1rem; color: #C0C0C0; margin-bottom: 10px;}
+        .toc-box ul { list-style: none; padding-left: 0; margin: 0; }
+        .toc-box li { margin-bottom: 8px; }
+        .toc-box a { color: #4fd1c5; }
+
+        /* Article Content */
+        section h2 { 
+            font-size: 1.5rem; 
+            margin-top: 40px; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #2c3e50; 
+            padding-bottom: 10px; 
+            color: #fff;
+        }
+        section h3, section h4 { color: #fff; margin-top: 25px; margin-bottom: 10px; }
+        
+        section p { margin-bottom: 20px; color: #cfcfcf; font-size: 1.05rem; }
+        section ol { margin-bottom: 20px; padding-left: 20px; color: #cfcfcf; }
+        section li { margin-bottom: 8px; }
+
+        /* Images */
+        .project-img-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .project-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #2c3e50;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #2c3e50; overflow-y: visible; }
+            .main-content { padding: 30px 20px; }
+            .header-split { flex-direction: column-reverse; gap: 20px; }
+            .header-logo { width: 120px; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WTJXDSS7"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="container">
+        
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <a href="index.html" class="back-btn">&larr; Back to Portfolio</a>
+
+            <h1>Jose F. Bardales</h1>
+            <div class="role-title">Senior Data Scientist</div>
+            <div class="location-title">Tegucigalpa, Honduras</div>
+
+            <p>Hello! This is a collection of projects I have worked on using SQL, Tableau, and Python.</p>
+
+            <div class="visit-counter">
+                Total Portfolio Visits: <span class="counter-number" id="visit-count">0</span>
+            </div>
+
+            <h3 style="margin-bottom: 5px;">Contact</h3>
+            <p style="margin-bottom: 15px;">
+                <a href="mailto:josefbardales@outlook.com" target="_blank">josefbardales@outlook.com</a>
+            </p>
+
+            <div class="cert-section">
+                <h3 style="margin-bottom: 10px;">Certifications</h3>
+                
+                <div class="cert-item">
+                    <h4 class="cert-title">Google Data Analytics Certificate</h4>
+                    <p class="cert-issuer">Granted by: Google</p>
+                    <a href="https://www.coursera.org/account/accomplishments/professional-cert/FCPVMXLDTC8P?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+
+                <div class="cert-item">
+                    <h4 class="cert-title">Human Talent Management</h4>
+                    <p class="cert-issuer">Granted by: UNITEC</p>
+                    <a href="https://drive.google.com/file/d/1AyQhJ-RA9tMk2Nan43c7xekk6dTl53rm/view?usp=sharing" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+
+                <div class="cert-item">
+                    <h4 class="cert-title">1st Place, Int. Business Intelligence</h4>
+                    <p class="cert-issuer">Granted by: LABSAG</p>
+                    <a href="https://drive.google.com/file/d/1fmju_rH4lUeCkAAae4iq-oGTT6EVIlme/view?usp=sharing" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 10px; font-size: 1rem;">Social</h3>
+            <div style="display: flex; gap: 15px;">
+                <a href="https://github.com/Josefbardales/PortfolioCodes" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/josefbardales/" target="_blank">LinkedIn</a>
+            </div>
+        </aside>
+
+        <!-- RIGHT MAIN CONTENT -->
+        <main class="main-content">
+            
+            <!-- HEADER SPLIT -->
+            <div class="header-split">
+                <div class="header-left">
+                    <h1 class="page-title">Regression Analysis to Reduce Poverty and Violence in Honduras</h1>
+                    
+                    <div class="toc-box">
+                        <h3>Table of Contents</h3>
+                        <ul>
+                            <li><a href="#introduction">1. Introduction</a></li>
+                            <li><a href="#procedure">2. Procedure</a></li>
+                            <li><a href="#results">3. Results</a></li>
+                            <li><a href="#conclusions">4. Conclusions</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <img src="https://logos-world.net/wp-content/uploads/2021/10/Python-Symbol.png" alt="Python Logo" class="header-logo">
+                </div>
+            </div>
+
+            <!-- INTRODUCTION -->
+            <section id="introduction">
+                <h2>1. Introduction</h2>
+                <p>
+                    In this project, I downloaded multiple datasets from <a href="https://ourworldindata.org/" target="_blank">Our World in Data</a>. These datasets are related to the following topics:
+                </p>
+                <ol>
+                    <li>Poverty - Share Below $1 and $2.15 a day.</li>
+                    <li>Economy - GDP per capita</li>
+                    <li>Education - Education Spending</li>
+                    <li>Electricity - Urban and Rural access to electricity</li>
+                    <li>Tourism - Tourists</li>
+                    <li>Internet - Internet Users</li>
+                    <li>Renewable Energy - Renewable electricity share</li>
+                    <li>Violence - Homicides</li>
+                    <li>Health Spending - Health Spending</li>
+                    <li>Agricultural Land - Agricultural land hectares</li>
+                </ol>
+            </section>
+
+            <!-- PROCEDURE -->
+            <section id="procedure">
+                <h2>2. Procedure</h2>
+                <p>First, I had to import and merge the Data:</p>
+                
+                <div class="project-img-container">
+                    <img src="images/Step1.png" alt="Importing Data" class="project-img">
+                </div>
+
+                <p>
+                    Once I imported all the different datasets I downloaded, I realized I had not cleaned them. First, I joined them on Entity and Year. Then, upon closer inspection, it appeared that by filtering for the years 1990 and 2021 the data would be clean for my purposes.
+                </p>
+
+                <div class="project-img-container">
+                    <img src="images/Step2.png" alt="Cleaning Data" class="project-img">
+                </div>
+
+                <p>
+                    Having my Data ready for processing, I decided to create a heatmap of correlations to easily identify which values were higher and for an overall view of correlations.
+                </p>
+
+                <div class="project-img-container">
+                    <img src="images/Step3.png" alt="Code for Heatmap" class="project-img">
+                </div>
+                <div class="project-img-container">
+                    <img src="images/CorrelationMatrix.png" alt="Correlation Matrix Heatmap" class="project-img">
+                </div>
+
+                <p>
+                    As you can see, the heat map clearly indicates hotter or redder values. I could quickly identify how both rural access to electricity and internet users are correlated.
+                </p>
+                <p>
+                    But just in case, I decided to identify the top 5 correlations which were GDP per capita, Year, homicides, Internet users, and rural access to electricity.
+                </p>
+            </section>
+
+            <!-- RESULTS -->
+            <section id="results">
+                <h2>3. Results</h2>
+                <p>With this, we can now go onto the regression analysis. First, we will analyze poverty:</p>
+
+                <div class="project-img-container">
+                    <img src="images/RegressionAnalysis1.png" alt="Regression Analysis 1" class="project-img">
+                </div>
+
+                <p style="text-align: center; font-weight: bold; margin-top: 20px;">
+                    You might now be asking yourself, "Ok, what do these numbers mean?"
+                </p>
+
+                <p>
+                    A <strong>R-squared</strong> value of 0.498 and an adjusted value of 0.401 implies that about 49.8% of the variability in the dependent variable is explained by the model. After adjusting the number of predictors, about 40.1% of the variability is explained.
+                </p>
+                <p>
+                    The <strong>F-statistic</strong> being 5.155 indicates that the model is statistically significant at conventional levels, suggesting that at least one of the predictors is useful in predicting the dependent variable.
+                </p>
+                <p>
+                    However, the individual p-values are higher than 0.05 for each column. This means that the individual values are not statistically significant, but it is worth noting that the model as a whole does have some explanatory power over the poverty rate.
+                </p>
+                
+                <hr style="border: 0; border-top: 1px solid #2c3e50; margin: 40px 0;">
+
+                <p>
+                    We will now run the regression analysis on homicides in order to search for strategies to reduce violence. I obtained better results with this second analysis.
+                </p>
+
+                <div class="project-img-container">
+                    <img src="images/RegressionAnalysis2.png" alt="Regression Analysis 2" class="project-img">
+                </div>
+
+                <p>
+                    In this case, the value is 0.734 for <strong>R-squared</strong> which means that 73.4% of the variability in the homicide rate can be explained by the independent values in the model. This is a high value, suggesting that the model has significant explanatory power. When using the Adjusted R-squared, the value is 0.682 which is slightly lower but still a very good fit.
+                </p>
+                <p>
+                    The <strong>F-statistic</strong> is 14.33 this time around, almost three times higher than that for the poverty model, suggesting that the predictors in the homicide model collectively explain more of the variation in the dependent variable. Both models are statistically significant at conventional levels, but the homicide model appears to have stronger overall explanatory power.
+                </p>
+                <p>
+                    The values obtained for both urban and rural access to electricity and share below $1 a day are both statistically significant.
+                </p>
+            </section>
+
+            <!-- CONCLUSIONS -->
+            <section id="conclusions">
+                <h2>4. Conclusions</h2>
+                
+                <h4>Poverty Model</h4>
+                <p>
+                    The poverty model offers valuable insights into the economic landscape of Honduras, but it also raises questions about the underlying drivers of poverty. Individual predictors such as "GDP per capita," "homicides," "Internet users," and "rural access to electricity percentage" were not statistically significant, suggesting that they may not be the primary factors influencing poverty in the current model. However, the strong negative correlations observed between "Share Below $1 a day" and variables like "GDP Per Capita" (-0.64), "Rural Access to Electricity" (-0.56), and "Internet Users" (-0.57) provide clues about the interaction between economic and social factors.
+                </p>
+                <p>
+                    The negative correlation between poverty and years (-0.62) is an encouraging sign of progress but represents the need for more robust efforts to reduce poverty to build a stronger negative correlation. Further refinement of the model, including consideration of other variables, interactions between predictors, or alternative specifications, could lead to a more nuanced understanding of poverty dynamics in Honduras.
+                </p>
+
+                <h4>Violence Model</h4>
+                <p>
+                    The analysis of homicides in Honduras presents an intriguing picture of the factors influencing violence. The only negative correlation for homicides are both poverty indicators, with "Share below $2.15 a day" having the strongest at -0.74, although this relationship requires more in-depth examination, as with the values obtained, this means that a 1% increase in "Share below $2.15 a day" is related to approximately 106 fewer homicides. Significant predictors such as "urban access to electricity percentage" have high correlation with homicides (0.76).
+                </p>
+                <p>
+                    The regression analysis demonstrated that the values obtained for access to electricity and share below $1, $2.15 a day are statistically significant. Due to the results obtained, policy interventions focused on equitable urban development and poverty alleviation could be key to addressing the challenge of violence, but a comprehensive approach that considers multiple dimensions of society is essential.
+                </p>
+            </section>
+
+            <!-- Footer for the article -->
+            <div style="margin-top: 60px; border-top: 1px solid #2c3e50; padding-top: 20px; text-align: center;">
+                <a href="index.html" class="back-btn" style="font-size: 1rem;">&larr; Return to All Projects</a>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

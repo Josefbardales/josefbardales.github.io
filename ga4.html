@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WTJXDSS7');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Analytics (GA4) - Jose Bardales</title>
+    <style>
+        /* --- RESET & BASICS --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* THEME: Royal Navy Blue */
+            background-color: #152039; 
+            color: #e0e0e0;
+            line-height: 1.8; 
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 300px;
+            height: 100vh; 
+            position: sticky;
+            top: 0;
+            overflow-y: auto; 
+            background-color: #0d1424;
+            padding: 30px 25px; 
+            border-right: 1px solid #2c3e50;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: #0d1424; }
+        .sidebar::-webkit-scrollbar-thumb { background: #2c3e50; border-radius: 4px; }
+
+        .sidebar h1 { font-size: 1.8rem; margin-bottom: 5px; color: #fff; font-weight: 600; }
+        .role-title { color: #ffffff; font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
+        .location-title { color: #a0aec0; font-size: 0.9rem; margin-bottom: 20px; display: block; }
+        .sidebar p { margin-bottom: 15px; color: #cfcfcf; font-size: 0.9rem; line-height: 1.5;}
+        .sidebar h3 { margin-bottom: 5px; color: #fff; font-weight: 600; font-size: 1.1rem; }
+
+        a { color: #C0C0C0; text-decoration: none; transition: color 0.3s ease; font-weight: 500; }
+        a:hover { color: #ffffff; text-decoration: underline; }
+
+        .back-btn {
+            display: block;
+            margin-bottom: 20px;
+            color: #4fd1c5;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .back-btn:hover { color: #fff; text-decoration: none; }
+
+        .visit-counter {
+            background-color: #1e2b4a;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            border: 1px solid #3b4c75;
+            text-align: center;
+        }
+        .counter-number { display: inline-block; margin-left: 5px; font-weight: bold; color: #4fd1c5; }
+
+        .cert-section { margin-top: 5px; margin-bottom: 15px; border-top: 1px solid #2c3e50; padding-top: 15px; }
+        .cert-item { margin-bottom: 12px; }
+        .cert-title { font-size: 0.95rem; color: #fff; margin-bottom: 2px; line-height: 1.2; font-weight: 600;}
+        .cert-issuer { font-size: 0.8rem; color: #8892b0; margin-bottom: 2px; font-style: italic; }
+        .cert-link { font-size: 0.8rem; display: inline-block; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 50px 80px;
+            background-color: #152039;
+            max-width: 1200px; 
+        }
+
+        h1.page-title { font-size: 2.2rem; margin-bottom: 10px; color: #fff; }
+        
+        .header-split {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            gap: 40px;
+            flex-wrap: wrap-reverse; 
+        }
+
+        .header-left { flex: 1; min-width: 300px; }
+        .header-right { flex-shrink: 0; }
+
+        .header-logo {
+            width: 180px; 
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
+        }
+
+        .toc-box {
+            background-color: #1e2b4a;
+            padding: 20px 25px;
+            border-radius: 12px;
+            border: 1px solid #2c3e50;
+            margin-top: 20px;
+            display: inline-block;
+            width: 100%;
+        }
+        .toc-box h3 { margin-top: 0; font-size: 1.1rem; color: #C0C0C0; margin-bottom: 10px;}
+        .toc-box ul { list-style: none; padding-left: 0; margin: 0; }
+        .toc-box li { margin-bottom: 8px; }
+        .toc-box a { color: #4fd1c5; }
+
+        section h2 { 
+            font-size: 1.5rem; 
+            margin-top: 40px; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #2c3e50; 
+            padding-bottom: 10px; 
+            color: #fff;
+        }
+        section h3, section h4 { color: #fff; margin-top: 25px; margin-bottom: 10px; }
+        
+        section p { margin-bottom: 20px; color: #cfcfcf; font-size: 1.05rem; }
+        section li { margin-bottom: 8px; }
+
+        /* Code Block for GTM Script */
+        .code-block {
+            background-color: #0b101d; 
+            border: 1px solid #2c3e50;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #d4d4d4;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .code-tag { color: #e06c75; }
+        .code-attr { color: #d19a66; }
+        .code-string { color: #98c379; }
+
+        /* Placeholder for your future screenshots */
+        .project-img-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .project-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #2c3e50;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #2c3e50; overflow-y: visible; }
+            .main-content { padding: 30px 20px; }
+            .header-split { flex-direction: column-reverse; gap: 20px; }
+            .header-logo { width: 120px; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WTJXDSS7"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="container">
+        
+        <!-- LEFT SIDEBAR -->
+        <aside class="sidebar">
+            <a href="index.html" class="back-btn">&larr; Back to Portfolio</a>
+
+            <h1>Jose F. Bardales</h1>
+            <div class="role-title">Senior Data Scientist</div>
+            <div class="location-title">Tegucigalpa, Honduras</div>
+
+            <p>Hello! This is a collection of projects I have worked on using SQL, Tableau, and Python.</p>
+
+            <div class="visit-counter">
+                Total Portfolio Visits: <span class="counter-number" id="visit-count">0</span>
+            </div>
+
+            <h3 style="margin-bottom: 5px;">Contact</h3>
+            <p style="margin-bottom: 15px;">
+                <a href="mailto:josefbardales@outlook.com" target="_blank">josefbardales@outlook.com</a>
+            </p>
+
+            <div class="cert-section">
+                <h3 style="margin-bottom: 10px;">Certifications</h3>
+                
+                <div class="cert-item">
+                    <h4 class="cert-title">Google Data Analytics Certificate</h4>
+                    <p class="cert-issuer">Granted by: Google</p>
+                    <a href="https://www.coursera.org/account/accomplishments/professional-cert/FCPVMXLDTC8P?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+
+                <div class="cert-item">
+                    <h4 class="cert-title">Human Talent Management</h4>
+                    <p class="cert-issuer">Granted by: UNITEC</p>
+                    <a href="https://drive.google.com/file/d/1AyQhJ-RA9tMk2Nan43c7xekk6dTl53rm/view?usp=sharing" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+
+                <div class="cert-item">
+                    <h4 class="cert-title">1st Place, Int. Business Intelligence</h4>
+                    <p class="cert-issuer">Granted by: LABSAG</p>
+                    <a href="https://drive.google.com/file/d/1fmju_rH4lUeCkAAae4iq-oGTT6EVIlme/view?usp=sharing" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 10px; font-size: 1rem;">Social</h3>
+            <div style="display: flex; gap: 15px;">
+                <a href="https://github.com/Josefbardales/PortfolioCodes" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/josefbardales/" target="_blank">LinkedIn</a>
+            </div>
+        </aside>
+
+        <!-- RIGHT MAIN CONTENT -->
+        <main class="main-content">
+            
+            <!-- HEADER SPLIT -->
+            <div class="header-split">
+                <div class="header-left">
+                    <h1 class="page-title">Portfolio Analytics with GA4</h1>
+                    
+                    <div class="toc-box">
+                        <h3>Table of Contents</h3>
+                        <ul>
+                            <li><a href="#setup">1. GTM Implementation</a></li>
+                            <li><a href="#traffic">2. Traffic Analysis</a></li>
+                            <li><a href="#engagement">3. User Flow & Engagement</a></li>
+                            <li><a href="#geo">4. Demographics & Acquisition</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <!-- GA Logo -->
+                    <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="Google Analytics Logo" class="header-logo">
+                </div>
+            </div>
+
+            <!-- 1. SETUP -->
+            <section id="setup">
+                <h2>1. GTM Implementation</h2>
+                <p>
+                    Understanding how users interact with my portfolio is crucial for optimization. Instead of hardcoding the Google Analytics tracking ID directly, I utilized <strong>Google Tag Manager (GTM)</strong>.
+                </p>
+                <p>
+                    This allows for greater flexibility, enabling me to manage multiple tags (GA4, custom event listeners) without altering the codebase. Below is the container snippet implemented in the <code>&lt;head&gt;</code> of every page on this site:
+                </p>
+
+                <!-- Technical Code Block -->
+                <div class="code-block">
+&lt;<span class="code-tag">script</span>&gt;<br>
+&nbsp;&nbsp;(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':<br>
+&nbsp;&nbsp;new Date().getTime(),event:<span class="code-string">'gtm.js'</span>});var f=d.getElementsByTagName(s)[0],<br>
+&nbsp;&nbsp;j=d.createElement(s),dl=l!=<span class="code-string">'dataLayer'</span>?<span class="code-string">'&l='</span>+l:<span class="code-string">''</span>;j.async=true;j.src=<br>
+&nbsp;&nbsp;<span class="code-string">'https://www.googletagmanager.com/gtm.js?id='</span>+i+dl;f.parentNode.insertBefore(j,f);<br>
+&nbsp;&nbsp;})(window,document,<span class="code-string">'script'</span>,<span class="code-string">'dataLayer'</span>,<span class="code-string">'GTM-WTJXDSS7'</span>);<br>
+&lt;/<span class="code-tag">script</span>&gt;
+                </div>
+            </section>
+
+            <!-- 2. TRAFFIC -->
+            <section id="traffic">
+                <h2>2. Traffic Analysis</h2>
+                <p>
+                    Using GA4, I track the volume of visitors over time. This helps correlate traffic spikes with specific job applications or LinkedIn posts. 
+                </p>
+                <p>
+                    <strong>Key Metric:</strong> <em>Total Users & New Users by Week.</em>
+                </p>
+                
+                <div class="project-img-container">
+                    <!-- Placeholder: Replace with a screenshot of your GA4 line chart showing users over time -->
+                    <img src="https://via.placeholder.com/800x400/0d1424/ffffff?text=Place+Your+GA4+Traffic+Chart+Screenshot+Here" alt="Traffic Analysis Chart" class="project-img">
+                </div>
+                <p>
+                    <em>Note: The image above is a placeholder. Once data accumulates, I will replace it with a snapshot of my live dashboard showing User trends over the last 30 days.</em>
+                </p>
+            </section>
+
+            <!-- 3. ENGAGEMENT -->
+            <section id="engagement">
+                <h2>3. User Flow & Path Exploration</h2>
+                <p>
+                    It is not enough to know <em>that</em> people visited; I need to know <em>what</em> they viewed. I use the <strong>Path Exploration</strong> report to understand the user journey.
+                </p>
+                <p>
+                    <strong>The Funnel Question:</strong> Of the users who land on the <code>index.html</code> (Home), what percentage navigate to the <strong>Professional Experience</strong> page versus the <strong>Technical Projects</strong>?
+                </p>
+
+                <div class="project-img-container">
+                    <!-- Placeholder: Replace with screenshot of Path Exploration -->
+                    <img src="https://via.placeholder.com/800x400/0d1424/ffffff?text=Place+GA4+Path+Exploration+Screenshot+Here" alt="User Path Exploration" class="project-img">
+                </div>
+            </section>
+
+            <!-- 4. GEO & ACQUISITION -->
+            <section id="geo">
+                <h2>4. Demographics & Acquisition</h2>
+                <p>
+                    <strong>Geography:</strong> Validating that traffic is coming from the regions where I am applying for roles (e.g., USA, Europe, LATAM).
+                </p>
+                <p>
+                    <strong>Acquisition:</strong> Determining if users are finding me via <em>Direct</em> links (resumes sent via email) or <em>Referral</em> (LinkedIn/GitHub).
+                </p>
+
+                <div class="project-img-container">
+                    <!-- Placeholder: Replace with screenshot of World Map or Acquisition Table -->
+                    <img src="https://via.placeholder.com/800x400/0d1424/ffffff?text=Place+GA4+Geo+Map+Screenshot+Here" alt="Demographics Map" class="project-img">
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <div style="margin-top: 60px; border-top: 1px solid #2c3e50; padding-top: 20px; text-align: center;">
+                <a href="index.html" class="back-btn" style="font-size: 1rem;">&larr; Return to All Projects</a>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>

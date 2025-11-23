@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WTJXDSS7');</script>
+    <!-- End Google Tag Manager -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forecasting (SARIMA) - Jose Bardales</title>
+    <style>
+        /* --- RESET & BASICS --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* REVERTED: Royal Navy Blue */
+            background-color: #152039; 
+            color: #e0e0e0;
+            line-height: 1.8; 
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 300px;
+            height: 100vh; 
+            position: sticky;
+            top: 0;
+            overflow-y: auto; 
+            /* REVERTED: Darker Navy */
+            background-color: #0d1424;
+            padding: 30px 25px; 
+            border-right: 1px solid #2c3e50;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar::-webkit-scrollbar { width: 6px; }
+        .sidebar::-webkit-scrollbar-track { background: #0d1424; }
+        .sidebar::-webkit-scrollbar-thumb { background: #2c3e50; border-radius: 4px; }
+
+        /* Sidebar Typography & Elements */
+        .sidebar h1 { font-size: 1.8rem; margin-bottom: 5px; color: #fff; font-weight: 600; }
+        
+        .role-title { color: #ffffff; font-size: 1.1rem; font-weight: 500; margin-bottom: 2px; }
+        .location-title { color: #a0aec0; font-size: 0.9rem; margin-bottom: 20px; display: block; }
+        
+        .sidebar p { margin-bottom: 15px; color: #cfcfcf; font-size: 0.9rem; line-height: 1.5;}
+        .sidebar h3 { margin-bottom: 5px; color: #fff; font-weight: 600; font-size: 1.1rem; }
+
+        /* Links */
+        a { color: #C0C0C0; text-decoration: none; transition: color 0.3s ease; font-weight: 500; }
+        a:hover { color: #ffffff; text-decoration: underline; }
+
+        /* Back Button */
+        .back-btn {
+            display: block;
+            margin-bottom: 20px;
+            color: #4fd1c5;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .back-btn:hover { color: #fff; text-decoration: none; }
+
+        /* Visit Counter */
+        .visit-counter {
+            background-color: #1e2b4a;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            border: 1px solid #3b4c75;
+            text-align: center;
+        }
+        .counter-number { display: inline-block; margin-left: 5px; font-weight: bold; color: #4fd1c5; }
+
+        /* Certificates */
+        .cert-section { margin-top: 5px; margin-bottom: 15px; border-top: 1px solid #2c3e50; padding-top: 15px; }
+        .cert-item { margin-bottom: 12px; }
+        .cert-title { font-size: 0.95rem; color: #fff; margin-bottom: 2px; line-height: 1.2; font-weight: 600;}
+        .cert-issuer { font-size: 0.8rem; color: #8892b0; margin-bottom: 2px; font-style: italic; }
+        .cert-link { font-size: 0.8rem; display: inline-block; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 50px 80px;
+            /* REVERTED: Royal Navy Blue */
+            background-color: #152039;
+            max-width: 1200px; 
+        }
+
+        h1.page-title { font-size: 2.2rem; margin-bottom: 10px; color: #fff; }
+        
+        /* Header Layout (TOC + Logo) */
+        .header-split {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            gap: 40px;
+            flex-wrap: wrap-reverse; /* Wraps nicely on mobile */
+        }
+
+        .header-left {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .header-right {
+            flex-shrink: 0;
+        }
+
+        /* Python Logo Styling */
+        .header-logo {
+            width: 200px; /* Normal, nice size */
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.1));
+        }
+
+        /* TOC Box */
+        .toc-box {
+            background-color: #1e2b4a;
+            padding: 20px 25px;
+            border-radius: 12px;
+            border: 1px solid #2c3e50;
+            margin-top: 20px;
+            display: inline-block;
+            width: 100%;
+        }
+        .toc-box h3 { margin-top: 0; font-size: 1.1rem; color: #C0C0C0; margin-bottom: 10px;}
+        .toc-box ul { list-style: none; padding-left: 0; margin: 0; }
+        .toc-box li { margin-bottom: 8px; }
+        .toc-box a { color: #4fd1c5; }
+
+        /* Article Content */
+        section h2 { 
+            font-size: 1.5rem; 
+            margin-top: 40px; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #2c3e50; 
+            padding-bottom: 10px; 
+            color: #fff;
+        }
+        
+        section p { margin-bottom: 20px; color: #cfcfcf; font-size: 1.05rem; }
+
+        /* Images */
+        .project-img-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        .project-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid #2c3e50;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .container { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: 1px solid #2c3e50; overflow-y: visible; }
+            .main-content { padding: 30px 20px; }
+            .header-split { flex-direction: column-reverse; gap: 20px; }
+            .header-logo { width: 120px; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WTJXDSS7"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="container">
+        
+        <!-- LEFT SIDEBAR (Consistent with Index) -->
+        <aside class="sidebar">
+            <!-- Back Button -->
+            <a href="index.html" class="back-btn">&larr; Back to Portfolio</a>
+
+            <h1>Jose F. Bardales</h1>
+            
+            <div class="role-title">Senior Data Scientist</div>
+            <div class="location-title">
+                Tegucigalpa, Honduras
+            </div>
+
+            <p>Hello! This is a collection of projects I have worked on using SQL, Tableau, and Python.</p>
+
+            <!-- VISIT COUNTER -->
+            <div class="visit-counter">
+                Total Portfolio Visits: <span class="counter-number" id="visit-count">0</span>
+            </div>
+
+            <h3 style="margin-bottom: 5px;">Contact</h3>
+            <!-- ADDED target="_blank" -->
+            <p style="margin-bottom: 15px;">
+                <a href="mailto:josefbardales@outlook.com" target="_blank">josefbardales@outlook.com</a>
+            </p>
+
+            <!-- CERTIFICATES SECTION -->
+             <div class="cert-section">
+                <h3 style="margin-bottom: 10px;">Certifications</h3>
+                
+                <!-- ADDED target="_blank" to links -->
+                <div class="cert-item">
+                    <h4 class="cert-title">Google Data Analytics Certificate</h4>
+                    <p class="cert-issuer">Granted by: Google</p>
+                    <a href="https://www.coursera.org/account/accomplishments/professional-cert/FCPVMXLDTC8P?utm_source=link&utm_medium=certificate&utm_content=cert_image&utm_campaign=sharing_cta" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+
+                <div class="cert-item">
+                    <h4 class="cert-title">Human Talent Management</h4>
+                    <p class="cert-issuer">Granted by: UNITEC</p>
+                    <a href="https://drive.google.com/file/d/1AyQhJ-RA9tMk2Nan43c7xekk6dTl53rm/view?usp=sharing" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+
+                <div class="cert-item">
+                    <h4 class="cert-title">1st Place, Int. Business Intelligence</h4>
+                    <p class="cert-issuer">Granted by: LABSAG</p>
+                    <a href="https://drive.google.com/file/d/1fmju_rH4lUeCkAAae4iq-oGTT6EVIlme/view?usp=sharing" class="cert-link" target="_blank">View Certificate &rarr;</a>
+                </div>
+             </div>
+
+            <!-- SOCIAL -->
+            <h3 style="margin-bottom: 10px; font-size: 1rem;">Social</h3>
+            <div style="display: flex; gap: 15px;">
+                <!-- ADDED target="_blank" -->
+                <a href="https://github.com/Josefbardales/PortfolioCodes" target="_blank">GitHub</a>
+                <a href="https://www.linkedin.com/in/josefbardales/" target="_blank">LinkedIn</a>
+            </div>
+        </aside>
+
+        <!-- RIGHT MAIN CONTENT -->
+        <main class="main-content">
+            
+            <!-- HEADER SPLIT: Title/TOC on Left, Logo on Right -->
+            <div class="header-split">
+                <div class="header-left">
+                    <h1 class="page-title">Forecasting Data with SARIMA</h1>
+                    
+                    <!-- Table of Contents -->
+                    <div class="toc-box">
+                        <h3>Table of Contents</h3>
+                        <ul>
+                            <li><a href="#introduction">1. Introduction</a></li>
+                            <li><a href="#procedure">2. Procedure</a></li>
+                            <li><a href="#results">3. Results</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <!-- Python Logo -->
+                    <img src="https://logos-world.net/wp-content/uploads/2021/10/Python-Symbol.png" alt="Python Logo" class="header-logo">
+                </div>
+            </div>
+
+            <!-- Content Section -->
+            <section id="introduction">
+                <h2>1. Introduction</h2>
+                <p>
+                    I was tasked with forecasting a specific request for the coming quarters using Machine Learning. Since the demand in this case is seasonal, I decided to utilize a SARIMA model.
+                </p>
+                <p>
+                    <strong>ARIMA</strong> (AutoRegressive Integrated Moving Average) and <strong>SARIMA</strong> (Seasonal ARIMA) are models used to analyze and forecast time series data. ARIMA attempts to forecast future values by examining a combination of past values, past errors, and trends within the data.
+                </p>
+                <p>
+                    SARIMA extends ARIMA by explicitly considering seasonal patterns, making it ideal for this dataset.
+                </p>
+            </section>
+
+            <section id="procedure">
+                <h2>2. Procedure</h2>
+                <p>
+                    The first step is to import the data. I suppressed warnings to keep the output clean, as the function used to perform a grid search for the best SARIMA parameters tends to generate convergence warnings. Following this, I imported Pandas and Matplotlib to plot the data and inspect for seasonality or trends.
+                </p>
+                
+                <div class="project-img-container">
+                    <!-- Ensure your image is in an 'images' folder -->
+                    <img src="images/SARIMA1.png" alt="Importing libraries and data" class="project-img">
+                </div>
+
+                <p>
+                    Since clear trends are visible in the data over time, a SARIMA model is required (as opposed to a standard ARIMA model). The next step involves finding the optimal parameters for SARIMA using a grid search function:
+                </p>
+
+                <div class="project-img-container">
+                    <img src="images/SARIMA2.png" alt="Grid search for parameters" class="project-img">
+                </div>
+
+                <p>
+                    Using the best parameters derived from the grid search, I fitted the SARIMA model. I plotted the residuals and fitted values for visual inspection. As seen below, both are centered around the red dashed line at zero, indicating a mean of zero. While there is some remaining seasonality in the residuals, the results are satisfactory for this use case.
+                </p>
+
+                <div class="project-img-container">
+                    <img src="images/SARIMA3.png" alt="Residuals plot" class="project-img">
+                </div>
+
+                <p>
+                    Next, I reloaded the dataset. Based on previous results, I performed first-order differencing and then defined the training and testing datasets. Finally, I fitted the SARIMA model using the optimized parameters and forecasted the next two quarters, saving the output to a CSV file.
+                </p>
+
+                <div class="project-img-container">
+                    <img src="images/SARIMA4.png" alt="Forecast execution" class="project-img">
+                </div>
+            </section>
+
+            <section id="results">
+                <h2>3. Results</h2>
+                <p>
+                    Due to the sensitive nature of the data used in this project, I cannot share the specific underlying information. However, the chart below compares the real values obtained for the first month of Q3 (July) against my projected results.
+                </p>
+                
+                <div class="project-img-container">
+                    <img src="images/SARIMAResults.png" alt="Results comparison chart" class="project-img">
+                </div>
+
+                <p>
+                    The <strong>Mean Absolute Percentage Error (MAPE)</strong> for the forecasted installs in July is approximately <strong>7.08%</strong>. This indicates that, on average, the forecasted values deviated by only 7.08% from the actual values, resulting in an model accuracy of roughly <strong>93%</strong>.
+                </p>
+            </section>
+
+            <!-- Footer for the article -->
+            <div style="margin-top: 60px; border-top: 1px solid #2c3e50; padding-top: 20px; text-align: center;">
+                <a href="index.html" class="back-btn" style="font-size: 1rem;">&larr; Return to All Projects</a>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
