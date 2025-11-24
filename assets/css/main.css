@@ -124,6 +124,12 @@ input, select, textarea {
 
 		}
 
+/* --- Shared mobile layout overrides --- */
+@media (max-width: 768px) {
+	/* Ensure header split stacks with the left column last on mobile */
+	.header-split { flex-direction: column-reverse; gap: 20px; }
+}
+
 		@media screen and (max-width: 1280px) {
 
 			body, input, select, textarea {
