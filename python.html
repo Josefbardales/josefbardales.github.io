@@ -236,11 +236,11 @@
             <div class="role-title">Senior Data Scientist</div>
             <div class="location-title">Tegucigalpa, Honduras</div>
 
-            <p>Hello! This is a collection of projects I have worked on using SQL, Tableau, and Python.</p>
-
-            <div class="visit-counter">
-                Total Portfolio Visits: <span class="counter-number" id="visit-count">0</span>
-            </div>
+            <p>
+                Senior Data Strategist transforming raw data into revenue. Expert in double-sided marketplaces, predictive modeling, and BI infrastructure. 
+                <br><br>
+                This portfolio demonstrates my ability to solve complex business problems using whatever stack is required—from SQL and Python to Tableau and Cloud Architectures.
+            </p>
 
             <h3>Contact</h3>
             <p style="margin-bottom: 15px;">
@@ -441,48 +441,6 @@ sample_text = <span class="code-string">"I absolutely love this new feature! It'
 
             resultDiv.innerHTML = displayBox;
         }
-    </script>
-
-    <!-- VISIT COUNTER SCRIPT (Using CounterAPI.dev) -->
-    <script>
-        function updateCounter() {
-            const counterElement = document.getElementById('visit-count');
-            
-            // We use a unique namespace + key for your site
-            // Namespace: josefbardales
-            // Key: portfolio-visits
-            const apiUrl = 'https://api.counterapi.dev/v1/josefbardales/portfolio-visits';
-
-            // Check if user visited in this session/browser already
-            const hasVisited = localStorage.getItem('hasVisited');
-
-            if (!hasVisited) {
-                // NEW VISITOR: Call the 'up' endpoint to increment
-                fetch(`${apiUrl}/up`)
-                    .then(res => res.json())
-                    .then(data => {
-                        counterElement.innerText = data.count;
-                        localStorage.setItem('hasVisited', 'true');
-                    })
-                    .catch(err => {
-                        console.error("Counter Error:", err);
-                        counterElement.innerText = "1"; // Fallback
-                    });
-            } else {
-                // RETURNING VISITOR: Just read the value (no 'up')
-                fetch(apiUrl)
-                    .then(res => res.json())
-                    .then(data => {
-                        counterElement.innerText = data.count;
-                    })
-                    .catch(err => {
-                        console.error("Counter Error:", err);
-                        counterElement.innerText = "1"; // Fallback
-                    });
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', updateCounter);
     </script>
 
 </body>
